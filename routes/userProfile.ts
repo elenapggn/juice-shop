@@ -59,11 +59,14 @@ export function getUserProfile () {
         if (!code) {
           throw new Error('Username is null')
         }
-        username = eval(code) // eslint-disable-line no-eval
+        // Security fix: Do not evaluate untrusted input. Evaluating user-controlled data
+        // leads to code injection. Instead, treat the username as literal/escaped to
+        // prevent execution of injected code.
+        username = '\\' + username
       } catch (err) {
         username = '\\' + username
       }
-    } else {
+
       username = '\\' + username
     }
 
